@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EL LUX — Каталог товаров (сетка с фильтрами)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pistachio: #C6EBCB;
+      --deep: #042820;
+      --black: #0A0A0A;
+      --gold: #D4AF37;
+      --white: #FFFFFF;
+      --radius: 14px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Inter, system-ui, Arial;
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.6;
+    }
+    /* Header */
+    .hero {
+      background: linear-gradient(180deg, rgba(4, 40, 32, 0.95), rgba(4, 40, 32, 0.95)), url('assets/images/photo_1.jpeg') center/cover no-repeat;
+      padding: 36px 20px 24px;
+      color: var(--white);
+      position: relative;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .logo-container {
+      flex: 1;
+    }
+    .logo {
+      font-family: Playfair Display, serif;
+      font-size: 28px;
+      letter-spacing: 1.5px;
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+    .hero p {
+      margin: 0 0 16px;
+      opacity: 0.95;
+      font-size: 15px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .back-btn {
+      background: transparent;
+      color: var(--pistachio);
+      border: 2px solid var(--pistachio);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      transition: background 0.3s ease, color 0.3s ease;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      background: var(--pistachio);
+      color: var(--deep);
+    }
+    .all-products-btn {
+      background: transparent;
+      color: var(--pistachio);
+      border: 2px solid var(--pistachio);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      transition: background 0.3s ease, color 0.3s ease;
+      white-space: nowrap;
+    }
+    .all-products-btn.active {
+      background: var(--pistachio);
+      color: var(--deep);
+    }
+    .all-products-btn:not(.active):hover {
+      background: var(--pistachio);
+      color: var(--deep);
+    }
+    /* Обновленные фильтры */
+    .filters {
+      padding: 24px 0;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--pistachio);
+      margin-bottom: 28px;
+      justify-content: center;
+    }
+    
+    .filter-btn {
+      background: var(--white);
+      color: var(--deep);
+      border: 2px solid var(--deep);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 180px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: left;
+    }
+    
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--deep);
+      color: var(--pistachio);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(4, 40, 32, 0.2);
+    }
+    
+    .filter-btn-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .filter-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+    
+    .filter-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .filter-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+    
+    .filter-desc {
+      font-size: 12px;
+      opacity: 0.8;
+      text-align: center;
+      line-height: 1.3;
+    }
+    
+    /* Адаптивность для фильтров */
+    @media (max-width: 992px) {
+      .filter-btn {
+        width: 160px;
+        height: 110px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .filter-btn {
+        width: 140px;
+        height: 100px;
+        padding: 16px;
+      }
+      
+      .filter-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+      
+      .filter-title {
+        font-size: 14px;
+      }
+      
+      .filter-desc {
+        font-size: 11px;
+      }
+      
+      .hero-header {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .hero-buttons {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .filters {
+        gap: 12px;
+      }
+      
+      .filter-btn {
+        width: calc(50% - 12px);
+        height: 90px;
+        padding: 12px;
+      }
+      
+      .filter-btn-content {
+        flex-direction: row;
+        gap: 12px;
+      }
+      
+      .filter-icon {
+        margin-bottom: 0;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      
+      .filter-text {
+        align-items: flex-start;
+      }
+      
+      .filter-desc {
+        text-align: left;
+      }
+      
+      .hero-buttons {
+        flex-wrap: wrap;
+      }
+      
+      .back-btn,
+      .all-products-btn {
+        flex: 1;
+        min-width: 140px;
+        text-align: center;
+      }
+    }
+    /* Сетка товаров */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 24px;
+      padding: 20px 0;
+    }
+    .product-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(2, 10, 8, 0.08);
+      border: 1px solid rgba(3, 3, 3, 0.02);
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover {
+      transform: scale(1.02);
+    }
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .product-info {
+      padding: 18px;
+    }
+    .product-category {
+      display: inline-block;
+      background: var(--pistachio);
+      color: var(--deep);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .product-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--deep);
+    }
+    .product-desc {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 12px;
+    }
+    .product-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--deep);
+      margin-bottom: 16px;
+    }
+    .product-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-details {
+      background: var(--deep);
+      color: var(--pistachio);
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .btn-details:hover {
+      background: var(--gold);
+      color: var(--deep);
+    }
+    .btn-whatsapp {
+      background: var(--black);
+      color: var(--pistachio);
+      padding: 12px 18px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .btn-whatsapp:hover {
+      background: #25D366;
+    }
+    /* WhatsApp CTA */
+    .whatsapp-footer {
+      display: block;
+      margin: 30px auto 20px;
+      max-width: 500px;
+      background: var(--black);
+      color: var(--pistachio);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .whatsapp-footer:hover {
+      background: var(--gold);
+      color: var(--deep);
+      transform: scale(1.03);
+    }
+    /* Footer */
+    footer {
+      background: var(--black);
+      color: var(--pistachio);
+      padding: 18px;
+      text-align: center;
+      margin-top: 30px;
+      border-top: 4px solid var(--pistachio);
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="hero-header">
+        <div class="logo-container">
+          <a href="index.html" class="logo">EL LUX</a>
+          <h1>Каталог товаров — все категории</h1>
+          <p>Все товары EL LUX в одной сетке. Используйте фильтры для быстрого поиска.</p>
+        </div>
+        <div class="hero-buttons">
+          <a href="index.html" class="back-btn">← На главную</a>
+          <button class="all-products-btn active" id="showAllProducts">Все товары</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="filters">
+      <button class="filter-btn" data-category="servizy">
+        <div class="filter-btn-content">
+          <div class="filter-icon">🍽️</div>
+          <div class="filter-text">
+            <div class="filter-title">Сервизы</div>
+            <div class="filter-desc">Полные наборы 24+ предметов</div>
+          </div>
+        </div>
+      </button>
+      
+      <button class="filter-btn" data-category="tea">
+        <div class="filter-btn-content">
+          <div class="filter-icon">🫖</div>
+          <div class="filter-text">
+            <div class="filter-title">Чайные наборы</div>
+            <div class="filter-desc">Чайники, чашки, аксессуары</div>
+          </div>
+        </div>
+      </button>
+      
+      <button class="filter-btn" data-category="glasses">
+        <div class="filter-btn-content">
+          <div class="filter-icon">🥂</div>
+          <div class="filter-text">
+            <div class="filter-title">Бокалы</div>
+            <div class="filter-desc">Для вина, шампанского, коктейлей</div>
+          </div>
+        </div>
+      </button>
+      
+      <button class="filter-btn" data-category="accessories">
+        <div class="filter-btn-content">
+          <div class="filter-icon">✨</div>
+          <div class="filter-text">
+            <div class="filter-title">Аксессуары</div>
+            <div class="filter-desc">Подставки, сервировочные элементы</div>
+          </div>
+        </div>
+      </button>
+    </section>
+
+    <section class="products-grid" id="products">
+      <!-- Товар 1 -->
+      <article class="product-card" data-category="servizy">
+        <img src="https://i.ibb.co/ccWS8CYY/IMG-6244.jpg" alt="">
+        <div class="product-info">
+          <span class="product-category">Сервизы</span>
+          <h3 class="product-title">Сервиз "Амелия" — 24 предмета</h3>
+          <p class="product-desc">Фарфоровый сервиз с позолоченной окантовкой. В комплекте: 6 тарелок, 6 суповых мисок, 6 салатников, 6 чашек с блюдцами.</p>
+          <div class="product-price">24 900 ₽</div>
+          <div class="product-actions">
+            <a href="#amelia-details" class="btn-details">Подробнее</a>
+            <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, интересует сервиз 'Амелия'" target="_blank" class="btn-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Товар 2 -->
+      <article class="product-card" data-category="servizy">
+        <img src="https://i.ibb.co/ccWS8CYY/IMG-6244.jpg" alt="">
+        <div class="product-info">
+          <span class="product-category">Сервизы</span>
+          <h3 class="product-title">Сервиз "Нева" — 36 предметов</h3>
+          <p class="product-desc">Классический белый сервиз с рельефным орнаментом. Полный комплект для торжеств на 12 персон.</p>
+          <div class="product-price">38 500 ₽</div>
+          <div class="product-actions">
+            <a href="#neva-details" class="btn-details">Подробнее</a>
+            <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, интересует сервиз 'Нева'" target="_blank" class="btn-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Товар 3 -->
+      <article class="product-card" data-category="tea">
+        <img src="https://i.ibb.co/ccWS8CYY/IMG-6244.jpg" alt="">
+        <div class="product-info">
+          <span class="product-category">Чайные наборы</span>
+          <h3 class="product-title">Чайный набор "Verde" — 12 предметов</h3>
+          <p class="product-desc">Керамический чайный набор с зелёной глазурью. В комплекте: чайник, 6 чашек, 6 блюдец.</p>
+          <div class="product-price">14 800 ₽</div>
+          <div class="product-actions">
+            <a href="#verde-details" class="btn-details">Подробнее</a>
+            <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, интересует чайный набор 'Verde'" target="_blank" class="btn-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Товар 4 -->
+      <article class="product-card" data-category="glasses">
+        <img src="https://i.ibb.co/ccWS8CYY/IMG-6244.jpg" alt="">
+        <div class="product-info">
+          <span class="product-category">Бокалы</span>
+          <h3 class="product-title">Бокалы для вина — набор 6</h3>
+          <p class="product-desc">Хрустальные бокалы для красного и белого вина. Высота 22 см, объём 450 мл.</p>
+          <div class="product-price">8 900 ₽</div>
+          <div class="product-actions">
+            <a href="#glasses-details" class="btn-details">Подробнее</a>
+            <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, интересуют бокалы для вина" target="_blank" class="btn-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Товар 5 -->
+      <article class="product-card" data-category="accessories">
+        <img src="https://i.ibb.co/ccWS8CYY/IMG-6244.jpg" alt="">
+        <div class="product-info">
+          <span class="product-category">Аксессуары</span>
+          <h3 class="product-title">Подставка для сервировки</h3>
+          <p class="product-desc">Деревянная подставка для сервировки стола. Размер 40×60 см, натуральное дерево.</p>
+          <div class="product-price">5 500 ₽</div>
+          <div class="product-actions">
+            <a href="#stand-details" class="btn-details">Подробнее</a>
+            <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, интересует подставка для сервировки" target="_blank" class="btn-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Товар 6 -->
+      <article class="product-card" data-category="servizy">
+        <img src="https://i.ibb.co/ccWS8CYY/IMG-6244.jpg" alt="">
+        <div class="product-info">
+          <span class="product-category">Сервизы</span>
+          <h3 class="product-title">Сервиз "Империал" — 32 предмета</h3>
+          <p class="product-desc">Роскошный сервиз с кобальтовой росписью и золотым декором. Для особых случаев и презентаций.</p>
+          <div class="product-price">52 000 ₽</div>
+          <div class="product-actions">
+            <a href="#imperial-details" class="btn-details">Подробнее</a>
+            <a href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, интересует сервиз 'Империал'" target="_blank" class="btn-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <a class="whatsapp-footer" href="https://wa.me/7XXXXXXXXXX?text=Здравствуйте, хочу узнать о всех товарах El Lux" target="_blank" rel="noopener">
+      📞 ЗАКАЗАТЬ КОНСУЛЬТАЦИЮ ПО ВСЕМ ТОВАРАМ В WHATSAPP
+    </a>
+  </main>
+
+  <footer>
+    © EL LUX — Контакты: +7 (XXX) XXX-XX-XX • Instagram @ellux • Каталог 2025
+  </footer>
+
+  <script>
+    // Фильтрация товаров
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const products = document.querySelectorAll('.product-card');
+    const showAllProductsBtn = document.getElementById('showAllProducts');
+
+    // Функция для сброса всех фильтров и показа всех товаров
+    function showAllProducts() {
+      // Убрать активный класс со всех кнопок фильтров
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Добавить активный класс к кнопке "Все товары"
+      showAllProductsBtn.classList.add('active');
+      
+      // Показать все товары
+      products.forEach(product => {
+        product.style.display = 'block';
+      });
+    }
+
+    // Инициализация - показать все товары при загрузке
+    showAllProducts();
+
+    // Обработчик для кнопки "Все товары"
+    showAllProductsBtn.addEventListener('click', showAllProducts);
+
+    // Обработчики для кнопок фильтров
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Убрать активный класс со всех кнопок фильтров
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Убрать активный класс с кнопки "Все товары"
+        showAllProductsBtn.classList.remove('active');
+        
+        // Добавить активный класс к нажатой кнопке
+        button.classList.add('active');
+
+        const category = button.dataset.category;
+
+        products.forEach(product => {
+          if (product.dataset.category === category) {
+            product.style.display = 'block';
+          } else {
+            product.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Плавный скролл к деталям товара
+    document.querySelectorAll('.btn-details').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
